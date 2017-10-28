@@ -1,3 +1,5 @@
+#include<math.h>
+
 int LED7segment[][7]=
 {
 	{HIGH,HIGH,HIGH,HIGH,HIGH,HIGH,LOW},
@@ -53,7 +55,7 @@ void loop() {
 		Serial.println(sensor_value);
 		float dist = sensor_value * 0.017;
 		//dist = 1000.0; //DEBUG用
-		if (sensor_value > 1000) {
+		if (abs(sensor_value - 560)>500) {
 			is_timer_enable = true;
 		}
 		time_diff=millis() - start_time_ms;
@@ -64,8 +66,9 @@ void loop() {
 void show_value_to_7seg(unsigned long value){
 	unsigned long digit_selecter=1000;//TODO:いい変数名考えて
 	for(int digit=0;digit<4;++digit){
-		for(int segment=0;segment<4;++segment){
-			digitalWrite(LED_digit_port+segment, LED_digit[digit][segment]);
+		//floor(log10(value)+1)
+		for(int digit2=0;digit2<4;++digit2){
+			digitalWrite(LED_digit_port+digit2, LED_digit[digit][digit2]);
 		}
 		seg((value / digit_selecter) % 10);
 		digit_selecter*=10;
