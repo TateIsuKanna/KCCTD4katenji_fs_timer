@@ -23,13 +23,11 @@ const int trig_port = 13;
 const int echo_port = 14;
 const int LED_A_port = 2;
 const int LED_digit_port = 9;
-unsigned long int start_time_ms, time_diff = 0;
-volatile bool is_timer_enable = false;
-int count = 0;
-int val;
+unsigned long int start_time_ms;
+unsigned long int time_diff;
+bool is_timer_enable = false;
 void setup() {
 	Serial.begin(9600);
-	pinMode(LED_A_port, OUTPUT);
 	for(int i=0;i<7;++i){
 		pinMode(LED_A_port+i, OUTPUT);
 	}
@@ -38,7 +36,7 @@ void setup() {
 	}
 	pinMode(trig_port, OUTPUT);
 	pinMode(echo_port, INPUT);
-	start_time_ms = millis(); //開始時刻取得
+	start_time_ms = millis();
 }
 
 
@@ -50,11 +48,12 @@ void loop() {
 		delayMicroseconds(11);
 		digitalWrite(trig_port, LOW);
 		//Serial.println(time_diff);
-		////////////////////////////////////////////////////////////////////////////////////////////////////val = pulseIn(echo_port, HIGH);
-		float dist = val * 0.017;
-		dist = 4.0; //DEBUG用
+		int sensor_value;
+		////////////////////////////////////////////////////////////////////////////////////////////////////sensor_value = pulseIn(echo_port, HIGH);
+		float dist = sensor_value * 0.017;
+		//dist = 1000.0; //DEBUG用
 		if (dist > 4.0) {
-			//is_timer_enable = true;
+			is_timer_enable = true;
 		}
 		time_diff = millis() - start_time_ms;
 	}
@@ -64,7 +63,6 @@ void loop() {
 			digitalWrite(LED_digit_port+segment, LED_digit[digit][segment]);
 		}
 		seg((time_diff / digit_selecter) % 10);
-		//Serial.println(time_diff);
 		digit_selecter*=10;
 	}
 }
