@@ -25,6 +25,7 @@ const int LED_A_port = 2;
 const int LED_digit_port = 9;
 unsigned long int start_time_ms;
 bool is_timer_enable = false;
+unsigned long int time_diff;
 
 void setup() {
 	Serial.begin(9600);
@@ -52,11 +53,12 @@ void loop() {
 		Serial.println(sensor_value);
 		float dist = sensor_value * 0.017;
 		//dist = 1000.0; //DEBUG用
-		if (dist > 4.0) {
+		if (sensor_value > 1000) {
 			is_timer_enable = true;
 		}
-		show_value_to_7seg(millis() - start_time_ms);
+		time_diff=millis() - start_time_ms;
 	}
+	show_value_to_7seg(time_diff);
 }
 
 void show_value_to_7seg(unsigned long value){
