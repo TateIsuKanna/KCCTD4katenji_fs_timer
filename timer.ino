@@ -1,165 +1,81 @@
-int trig = 13;
-int echo = 14;
-int a = 2;
-int b = 3;
-int c = 4;
-int d = 5;
-int e = 6;
-int f = 7;
-int g = 8;
-int c1 = 9;
-int c2 = 10;
-int c3 = 11;
-int c4 = 12;
-int count = 0,val;
+int LED7segment[][7]=
+	{
+		{HIGH,HIGH,HIGH,HIGH,HIGH,HIGH,LOW},
+		{LOW,HIGH,HIGH,LOW,LOW,LOW,LOW},
+		{HIGH,HIGH,LOW,HIGH,HIGH,LOW,HIGH},
+		{HIGH,HIGH,HIGH,HIGH,LOW,LOW,HIGH},
+		{LOW,HIGH,HIGH,LOW,LOW,HIGH,HIGH},
+		{HIGH,LOW,HIGH,HIGH,LOW,HIGH,HIGH},
+		{HIGH,LOW,HIGH,HIGH,HIGH,HIGH,HIGH},
+		{HIGH,HIGH,HIGH,LOW,LOW,HIGH,LOW},
+		{HIGH,HIGH,HIGH,HIGH,HIGH,HIGH,HIGH},
+		{HIGH,HIGH,HIGH,HIGH,LOW,HIGH,HIGH}
+	};
+int LED_digit[][4]=
+	{
+		{HIGH,HIGH,HIGH,LOW},
+		{HIGH,HIGH,LOW,HIGH},
+		{HIGH,LOW,HIGH,HIGH},
+		{LOW,HIGH,HIGH,HIGH}
+	};
+
+const int trig_port = 13;
+const int echo_port = 14;
+const int LED_A_port = 2;
+const int LED_digit_port = 9;
+const int c1 = 9;
+const int c2 = 10;
+const int c3 = 11;
+const int c4 = 12;
+unsigned long int start_time_ms, time_diff = 0;
+volatile bool is_timer_enable = false;
+int count = 0;
+int val;
 void setup() {
-  pinMode(a, OUTPUT);
-  pinMode(b, OUTPUT);
-  pinMode(c, OUTPUT);
-  pinMode(d, OUTPUT);
-  pinMode(e, OUTPUT);
-  pinMode(f, OUTPUT);
-  pinMode(g, OUTPUT);
-  pinMode(c1, OUTPUT);
-  pinMode(c2, OUTPUT);
-  pinMode(c3, OUTPUT);
-  pinMode(c4, OUTPUT);
-  pinMode(trig, OUTPUT);
-  pinMode(echo, OUTPUT);
+	pinMode(LED_A_port, OUTPUT);
+	for(int i=0;i<7;++i){
+		pinMode(LED_A_port+i, OUTPUT);
+	}
+	for(int i=0;i<4;++i){
+		pinMode(LED_digit_port+i, OUTPUT);
+	}
+	pinMode(trig_port, OUTPUT);
+	pinMode(echo_port, INPUT);
+	start_time_ms = millis(); //開始時刻取得
 }
 
+
 void loop() {
+	if (!is_timer_enable){
+		digitalWrite(trig_port, LOW);
+		delayMicroseconds(1);
+		digitalWrite(trig_port, HIGH);
+		delayMicroseconds(11);
+		digitalWrite(trig_port, LOW);
+		////////////////////////////////////////////////////////////////////////////////////////////////////val = pulseIn(echo_port, HIGH);
+		float dist = val * 0.017;
+		dist = 10.0; //仮
+		if (dist > 4.0) {
+			//is_timer_enable = true;
+		} else {
 
-  digitalWrite(trig, LOW);
-  delayMicroseconds(1);
-  digitalWrite(trig, HIGH);
-  delayMicroseconds(11);
-  digitalWrite(trig, LOW);
-  val = pulseIn(echo, HIGH);
-  float dist = val * 0.017;
-  if (dist > 4.0) {
-
-  } else {
-
-  }
-  Serial.print(dist);
-  Serial.println("cm");
-  delay(100);
-  count++;
-
-
-  digitalWrite(c1, LOW);
-  digitalWrite(c2, LOW);
-  digitalWrite(c3, LOW);
-  digitalWrite(c4, HIGH);
-  seg((count / 10) % 10);
-
-  digitalWrite(c1, LOW);
-  digitalWrite(c2, LOW);
-  digitalWrite(c3, HIGH);
-  digitalWrite(c4, LOW);
-  seg((count / 100) % 10);
-
-  digitalWrite(c1, LOW);
-  digitalWrite(c2, HIGH);
-  digitalWrite(c3, LOW);
-  digitalWrite(c4, LOW);
-  seg((count / 1000) % 10);
+		}
+		time_diff = millis() - start_time_ms; 
+	}
+	int digit_selecter=1000;//TODO:いい変数名考えて
+	for(int digit=0;digit<4;++digit){
+		for(int segment=0;segment<4;++segment){
+			digitalWrite(LED_digit_port+segment, LED_digit[digit][segment]);
+		}
+		seg((time_diff / digit_selecter) % 10);
+		digit_selecter*=10;
+	}
 }
 
 void seg(int num) {
-  switch (num) {
-    case 0:
-      digitalWrite(a, HIGH);
-      digitalWrite(b, HIGH);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, HIGH);
-      digitalWrite(e, HIGH);
-      digitalWrite(f, HIGH);
-      digitalWrite(g, LOW);
-      break;
-    case 1:
-      digitalWrite(a, LOW);
-      digitalWrite(b, HIGH);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, LOW);
-      digitalWrite(e, LOW);
-      digitalWrite(f, LOW);
-      digitalWrite(g, LOW);
-      break;
-    case 2:
-      digitalWrite(a, HIGH);
-      digitalWrite(b, HIGH);
-      digitalWrite(c, LOW);
-      digitalWrite(d, HIGH);
-      digitalWrite(e, HIGH);
-      digitalWrite(f, LOW);
-      digitalWrite(g, HIGH);
-      break;
-    case 3:
-      digitalWrite(a, HIGH);
-      digitalWrite(b, HIGH);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, HIGH);
-      digitalWrite(e, LOW);
-      digitalWrite(f, LOW);
-      digitalWrite(g, HIGH);
-      break;
-    case 4:
-      digitalWrite(a, LOW);
-      digitalWrite(b, HIGH);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, LOW);
-      digitalWrite(e, LOW);
-      digitalWrite(f, HIGH);
-      digitalWrite(g, HIGH);
-      break;
-    case 5:
-      digitalWrite(a, HIGH);
-      digitalWrite(b, LOW);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, HIGH);
-      digitalWrite(e, LOW);
-      digitalWrite(f, HIGH);
-      digitalWrite(g, HIGH);
-      break;
-    case 6:
-      digitalWrite(a, HIGH);
-      digitalWrite(b, LOW);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, HIGH);
-      digitalWrite(e, HIGH);
-      digitalWrite(f, HIGH);
-      digitalWrite(g, HIGH);
-      break;
-    case 7:
-      digitalWrite(a, HIGH);
-      digitalWrite(b, HIGH);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, LOW);
-      digitalWrite(e, LOW);
-      digitalWrite(f, HIGH);
-      digitalWrite(g, LOW);
-      break;
-    case 8:
-      digitalWrite(a, HIGH);
-      digitalWrite(b, HIGH);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, HIGH);
-      digitalWrite(e, HIGH);
-      digitalWrite(f, HIGH);
-      digitalWrite(g, HIGH);
-      break;
-    case 9:
-      digitalWrite(a, HIGH);
-      digitalWrite(b, HIGH);
-      digitalWrite(c, HIGH);
-      digitalWrite(d, HIGH);
-      digitalWrite(e, LOW);
-      digitalWrite(f, HIGH);
-      digitalWrite(g, HIGH);
-      break;
-
-  }
+	for(int seg_i=0;seg_i<7;++seg_i){
+		digitalWrite(LED_A_port+seg_i,LED7segment[num][seg_i]);
+	}
+	delay(4);
 }
 
