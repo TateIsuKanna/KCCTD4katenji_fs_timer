@@ -1,23 +1,23 @@
 int LED7segment[][7]=
-	{
-		{HIGH,HIGH,HIGH,HIGH,HIGH,HIGH,LOW},
-		{LOW,HIGH,HIGH,LOW,LOW,LOW,LOW},
-		{HIGH,HIGH,LOW,HIGH,HIGH,LOW,HIGH},
-		{HIGH,HIGH,HIGH,HIGH,LOW,LOW,HIGH},
-		{LOW,HIGH,HIGH,LOW,LOW,HIGH,HIGH},
-		{HIGH,LOW,HIGH,HIGH,LOW,HIGH,HIGH},
-		{HIGH,LOW,HIGH,HIGH,HIGH,HIGH,HIGH},
-		{HIGH,HIGH,HIGH,LOW,LOW,HIGH,LOW},
-		{HIGH,HIGH,HIGH,HIGH,HIGH,HIGH,HIGH},
-		{HIGH,HIGH,HIGH,HIGH,LOW,HIGH,HIGH}
-	};
+{
+	{HIGH,HIGH,HIGH,HIGH,HIGH,HIGH,LOW},
+	{LOW,HIGH,HIGH,LOW,LOW,LOW,LOW},
+	{HIGH,HIGH,LOW,HIGH,HIGH,LOW,HIGH},
+	{HIGH,HIGH,HIGH,HIGH,LOW,LOW,HIGH},
+	{LOW,HIGH,HIGH,LOW,LOW,HIGH,HIGH},
+	{HIGH,LOW,HIGH,HIGH,LOW,HIGH,HIGH},
+	{HIGH,LOW,HIGH,HIGH,HIGH,HIGH,HIGH},
+	{HIGH,HIGH,HIGH,LOW,LOW,HIGH,LOW},
+	{HIGH,HIGH,HIGH,HIGH,HIGH,HIGH,HIGH},
+	{HIGH,HIGH,HIGH,HIGH,LOW,HIGH,HIGH}
+};
 int LED_digit[][4]=
-	{
-		{HIGH,HIGH,HIGH,LOW},
-		{HIGH,HIGH,LOW,HIGH},
-		{HIGH,LOW,HIGH,HIGH},
-		{LOW,HIGH,HIGH,HIGH}
-	};
+{
+	{HIGH,HIGH,HIGH,LOW},
+	{HIGH,HIGH,LOW,HIGH},
+	{HIGH,LOW,HIGH,HIGH},
+	{LOW,HIGH,HIGH,HIGH}
+};
 
 const int trig_port = 13;
 const int echo_port = 14;
@@ -56,7 +56,7 @@ void loop() {
 		if (dist > 4.0) {
 			//is_timer_enable = true;
 		}
-		time_diff = millis() - start_time_ms; 
+		time_diff = millis() - start_time_ms;
 	}
 	unsigned long digit_selecter=1000;//TODO:いい変数名考えて
 	for(int digit=0;digit<4;++digit){
@@ -64,6 +64,7 @@ void loop() {
 			digitalWrite(LED_digit_port+segment, LED_digit[digit][segment]);
 		}
 		seg((time_diff / digit_selecter) % 10);
+		//Serial.println(time_diff);
 		digit_selecter*=10;
 	}
 }
