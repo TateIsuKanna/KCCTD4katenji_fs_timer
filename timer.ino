@@ -65,8 +65,7 @@ void loop() {
 
 void show_value_to_7seg(unsigned long value){
 	unsigned long digit_selecter=1000;//TODO:いい変数名考えて
-	for(int digit=0;digit<4;++digit){
-		//floor(log10(value)+1)
+	for(int digit=0;digit<(value==0?1:floor(log10(value)+1));++digit){
 		for(int digit2=0;digit2<4;++digit2){
 			digitalWrite(LED_digit_port+digit2, LED_digit[digit][digit2]);
 		}
