@@ -23,15 +23,12 @@ const int trig_port = 13;
 const int echo_port = 14;
 const int LED_A_port = 2;
 const int LED_digit_port = 9;
-const int c1 = 9;
-const int c2 = 10;
-const int c3 = 11;
-const int c4 = 12;
 unsigned long int start_time_ms, time_diff = 0;
 volatile bool is_timer_enable = false;
 int count = 0;
 int val;
 void setup() {
+	Serial.begin(9600);
 	pinMode(LED_A_port, OUTPUT);
 	for(int i=0;i<7;++i){
 		pinMode(LED_A_port+i, OUTPUT);
@@ -52,17 +49,16 @@ void loop() {
 		digitalWrite(trig_port, HIGH);
 		delayMicroseconds(11);
 		digitalWrite(trig_port, LOW);
+		//Serial.println(time_diff);
 		////////////////////////////////////////////////////////////////////////////////////////////////////val = pulseIn(echo_port, HIGH);
 		float dist = val * 0.017;
-		dist = 10.0; //仮
+		dist = 4.0; //DEBUG用
 		if (dist > 4.0) {
 			//is_timer_enable = true;
-		} else {
-
 		}
 		time_diff = millis() - start_time_ms; 
 	}
-	int digit_selecter=1000;//TODO:いい変数名考えて
+	unsigned long digit_selecter=1000;//TODO:いい変数名考えて
 	for(int digit=0;digit<4;++digit){
 		for(int segment=0;segment<4;++segment){
 			digitalWrite(LED_digit_port+segment, LED_digit[digit][segment]);
@@ -76,6 +72,6 @@ void seg(int num) {
 	for(int seg_i=0;seg_i<7;++seg_i){
 		digitalWrite(LED_A_port+seg_i,LED7segment[num][seg_i]);
 	}
-	delay(4);
+	delay(5);
 }
 
