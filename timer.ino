@@ -78,6 +78,6 @@ void seg(int num) {
 	for(int seg_i=0;seg_i<7;++seg_i){
 		digitalWrite(LED_A_port+seg_i,LED7segment[num][seg_i]);
 	}
-	delay(10);
+	delay(8);
 }
 
