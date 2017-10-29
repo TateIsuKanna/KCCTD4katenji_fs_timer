@@ -60,11 +60,11 @@ void loop() {
 		}
 		time_diff=millis() - start_time_ms;
 	}
-	show_value_to_7seg(time_diff);
+	show_value_to_7seg(time_diff/1000);
 }
 
 void show_value_to_7seg(unsigned long value){
-	unsigned long digit_selecter=1000;//TODO:いい変数名考えて
+	unsigned long digit_selecter=1;//TODO:いい変数名考えて
 	for(int digit=0;digit<(value==0?1:floor(log10(value)+1));++digit){
 		for(int digit2=0;digit2<4;++digit2){
 			digitalWrite(LED_digit_port+digit2, LED_digit[digit][digit2]);
@@ -78,6 +78,6 @@ void seg(int num) {
 	for(int seg_i=0;seg_i<7;++seg_i){
 		digitalWrite(LED_A_port+seg_i,LED7segment[num][seg_i]);
 	}
-	delay(3);
+	delay(10);
 }
 
